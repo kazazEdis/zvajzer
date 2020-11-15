@@ -27,7 +27,7 @@ def main(oib_ili_mbs):
     operator = hakom_api.hakom_provjera(brojevi)
 
     # Konvertiraj sve u dictionary
-    converted_to_dict = {"sudski": sudski, "osobe": osobe, "operators":operator}
+    converted_to_dict = {"sudski": sudski, "osobe": osobe, "operators": operator}
     json_data = json.dumps(converted_to_dict, ensure_ascii=False, encoding="utf-8", indent=4)
     return json_data
 
