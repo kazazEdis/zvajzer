@@ -1,25 +1,25 @@
 import requests
 from bs4 import BeautifulSoup
+import os
 import companywall
 import sudreg
 import hakom_api
 import simplejson as json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, send_from_directory, request
 
 app = Flask(__name__)
 
-'''
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'static/favicon.ico', mimetype='image/vnd.microsoft.icon')
-'''
 
 
 def main(oib_ili_mbs):
     profile_link = companywall.profile_link(oib_ili_mbs)  # Adresa Companywall profila
     html_doc = requests.get('http://www.simple-cw.hr' + profile_link).text  # HTML Zahtjev
-    soup = BeautifulSoup(html_doc, "html5lib")  # HTML datoteka
+    soup = BeautifulSoup(html_doc, 'html5lib')  # HTML datoteka
     sudski = sudreg.provjera(oib_ili_mbs)
     osobe = companywall.odgovorne_osobe(soup)
     linkovi = companywall.contact_imgs(soup)
@@ -27,7 +27,7 @@ def main(oib_ili_mbs):
     operator = hakom_api.hakom_provjera(brojevi)
 
     # Konvertiraj sve u dictionary
-    converted_to_dict = {"sudski": sudski, "osobe": osobe, "operators": operator}
+    converted_to_dict = {"sudski": sudski, "osobe": osobe, "operators":operator}
     json_data = json.dumps(converted_to_dict, ensure_ascii=False, encoding="utf-8", indent=4)
     return json_data
 
