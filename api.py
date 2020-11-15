@@ -9,11 +9,12 @@ from flask import Flask, jsonify, send_from_directory, request
 
 app = Flask(__name__)
 
-
+'''
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'static/favicon.ico', mimetype='image/vnd.microsoft.icon')
+'''
 
 
 def main(oib_ili_mbs):
