@@ -4,6 +4,7 @@ import io
 import pytesseract
 from PIL import Image
 
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
 
 def profile_link(query):
     html_doc = requests.get('http://www.simple-cw.hr/Home/Search?n=' + query).text
