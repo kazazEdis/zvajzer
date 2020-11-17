@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 
 def hakom_provjera(contacts):
-    results = {}
+    results = []
     for contact in contacts:
         contact_number = contact.lstrip('0')
         # API Call
@@ -46,5 +46,5 @@ def hakom_provjera(contacts):
                     result = soup.findChild('td').text.strip()  # Extract operator info
                 except AttributeError:
                     pass
-        results.update({contact_number:result})
+        results.append(str(contact_number + ' = ' + result))
     return results

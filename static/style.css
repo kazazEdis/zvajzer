@@ -32,11 +32,17 @@
     font-family: "Arial Black", Gadget, sans-serif;
 }
 
+#results-box {
+    display: block;
+    padding-bottom: 1%;
+}
+
 #results {
-    color: white;
-    margin-left: 5%;
-    padding-bottom: 5%;
-    margin-right: 5%;
+    color: black;
+    margin-top: 3%;
+    margin-left: 7.5%;
+    margin-right: 7.5%;
+    margin-bottom: 5%;
 }
 
 .container-results {
