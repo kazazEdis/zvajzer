@@ -1,0 +1,48 @@
+.main-container {
+    padding-top: 10%;
+    padding-right: 35%!important;
+    padding-left: 35%!important;
+
+}
+
+
+.main-square {
+    height: auto;
+    background-color: #222222;
+  }
+  
+#heading {
+    font-size: 5vw;
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: white;
+    margin-left: 7.5%;
+    padding-top: 5%;
+    padding-right: auto;
+    width: 51%;
+}
+
+.search {
+    margin-left: 7.5%;
+    margin-right: 7.5%;
+}
+
+#zvajz-button {
+    margin-top: 3%;
+    font-size: medium!important;
+    font-family: "Arial Black", Gadget, sans-serif;
+}
+
+#results {
+    color: white;
+    margin-left: 5%;
+    padding-bottom: 5%;
+    margin-right: 5%;
+}
+
+.container-results {
+    margin-top: 3%;
+}
+
+body {
+    background-color: #909090!important;
+}
