@@ -1,6 +1,7 @@
 
 function parser(output) {
     let node = document.createElement("LI");
+    node.className = "list-group-item list-group-item-secondary";
     let textnode = document.createTextNode(output);         
     node.appendChild(textnode);
     document.getElementById("results").appendChild(node);
@@ -23,6 +24,7 @@ async function search() {
     parser(response.sudski.pravni_postupak)
     parser('OIB: ' + response.sudski.oib_tvrtke)
     parser('Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN')
+    parser(response.nkd)
     parser(response.sudski.adresa_sjedista_tvrtke)
     for (let i of response.osobe) {
         parser(i)

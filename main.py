@@ -11,12 +11,13 @@ def zvajzer(oib_ili_mbs):
     html_doc = requests.get('http://www.simple-cw.hr' + profile_link).text  # HTML Request
     soup = BeautifulSoup(html_doc, 'html5lib')  # HTML file
     sudski = sudreg.provjera(oib_ili_mbs)
+    nkd = companywall.nkd(soup)
     osobe = companywall.odgovorne_osobe(soup)
     linkovi = companywall.contact_imgs(soup)
     brojevi = companywall.ocr(linkovi)
     operator = hakom_api.hakom_provjera(brojevi)
 
     # Konvertiraj sve u dictionary
-    converted_to_dict = {"sudski": sudski, "osobe": osobe, "operators": operator}
+    converted_to_dict = {"sudski": sudski, "osobe": osobe, "operators": operator, "nkd": nkd}
     json_data = json.dumps(converted_to_dict, ensure_ascii=False, encoding="utf-8", indent=4)
     return json_data

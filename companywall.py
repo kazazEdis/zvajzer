@@ -4,7 +4,8 @@ import io
 import pytesseract
 from PIL import Image
 
-#pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"  # Windows tesseract location
+# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"  # Windows tesseract location
+
 
 def profile_link(query):
     html_doc = requests.get('http://www.simple-cw.hr/Home/Search?n=' + query).text
@@ -14,6 +15,13 @@ def profile_link(query):
     for i in profile_link_selector:
         profile_link = i['href']
     return profile_link
+
+def nkd(soup):
+    selector = '#body-content > div.container.bonitet-main-container > div > div.col-md-10 > div > div.col-md-7.pr-0-md > div:nth-child(8) > div.col-sm-8'
+    select = soup.select(selector)
+    strip = str(select[0]).lstrip('<div class="col-sm-8">\n\t\t\t\t\t\t\t\tI5630 -\n\t\t\t\t\t\t\t\t')
+    nkd = strip.rstrip(';\n\t\t\t\t\t\t\t\t</div>')
+    return nkd
 
 
 def odgovorne_osobe(soup):
@@ -27,6 +35,7 @@ def odgovorne_osobe(soup):
         d = c.replace(' \n                            ', '')
         odgovorne_osobe.append(d)
     return odgovorne_osobe
+
 
 def contact_imgs(soup):
     #  Brojevi telefona
@@ -49,7 +58,6 @@ def contact_imgs(soup):
 
     return contact_img_links
 
-
 def ocr(img_addresses):
     brojevi_telefona = []
     for img_address in img_addresses:
@@ -60,4 +68,3 @@ def ocr(img_addresses):
         if text_witouth_space not in brojevi_telefona:  # Provjeri duplikate u popisu brojeva
             brojevi_telefona.append(text_witouth_space)  # Dodaj broj na popis brojeva
     return brojevi_telefona
-
