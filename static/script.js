@@ -7,7 +7,20 @@ function parser(output) {
     document.getElementById("results").appendChild(node);
 }
 
+function addSpinner(elemId) {
+    let node = document.createElement("DIV");
+    node.id = "spinner"
+    node.className = "spinner-border text-light";
+    node.style = "margin-left: 7.5%;margin-bottom: 2%;"
+    node.role = "status"
+    let span = document.createElement('span')
+    span.class = "sr-only"
+    node.appendChild(span)
+    document.getElementById(elemId).appendChild(node);
+}
+
 async function search() {
+    addSpinner("results-box")
     var urlencoded = new URLSearchParams();
 
     var requestOptions = {
@@ -18,7 +31,6 @@ async function search() {
     const response = await fetch('/' + document.getElementById(oib.id).value, requestOptions)
     .then(response => response.json())
     .catch(error => console.log('error', error))
-    console.log(response.sudski)
 
     parser(response.sudski.skraceno_ime_tvrtke)
     parser(response.sudski.pravni_postupak)
@@ -32,4 +44,5 @@ async function search() {
     for (let i of response.operators) {
         parser(i)
     }
+    document.getElementById("spinner").remove()
     }
