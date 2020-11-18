@@ -1,10 +1,34 @@
 
-function parser(output) {
+function parser(status,output) { //Status can be ok, red, green
     let node = document.createElement("LI");
-    node.className = "list-group-item list-group-item-secondary";
+    if (status === 'ok'){
+        node.className = "list-group-item list-group-item-secondary";
+    } else if (status === 'red') {
+        node.className = "list-group-item list-group-item-danger";
+    } else if (status === 'green') {
+        node.className = "list-group-item list-group-item-success";
+    }
+    
     let textnode = document.createTextNode(output);         
     node.appendChild(textnode);
     document.getElementById("results").appendChild(node);
+}
+
+
+
+function contactsParser(contact) {
+    let box = document.createElement("DIV")
+    box.style = "margin-top: 2%;"
+    box.id = String(contact);      
+    let button = document.createElement("BUTTON");
+    button.innerHTML = String(contact);
+    button.type = "button";
+    button.id = "hackom-button";
+    button.className = "btn btn-danger";
+    button.setAttribute('onclick', 'hackom(' + String(contact) + ')');
+    box.appendChild(button)
+    document.getElementById("results").appendChild(box);
+    
 }
 
 function addSpinner(elemId) {
@@ -19,8 +43,24 @@ function addSpinner(elemId) {
     document.getElementById(elemId).appendChild(node);
 }
 
+async function hackom(contact) {
+    let requestOptions = {
+    method: 'GET',
+    };
+
+    const response = await fetch('/operator/' + String(contact), requestOptions)
+    .then(response => response.json())
+    .catch(error => console.log('error', error))
+
+    parser('ok',response.operator)
+    document.getElementById('0' + String(contact)).remove()
+
+
+    }
+
+
 async function search() {
-    addSpinner("results-box")
+    addSpinner('results-box')
     var urlencoded = new URLSearchParams();
 
     var requestOptions = {
@@ -31,18 +71,35 @@ async function search() {
     const response = await fetch('/' + document.getElementById(oib.id).value, requestOptions)
     .then(response => response.json())
     .catch(error => console.log('error', error))
+    console.log(response)
 
-    parser(response.sudski.skraceno_ime_tvrtke)
-    parser(response.sudski.pravni_postupak)
-    parser('OIB: ' + response.sudski.oib_tvrtke)
-    parser('Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN')
-    parser(response.nkd)
-    parser(response.sudski.adresa_sjedista_tvrtke)
-    for (let i of response.osobe) {
-        parser(i)
+    parser('ok', response.sudski.skraceno_ime_tvrtke)
+
+    //Company status check
+    if (response.sudski.pravni_postupak !== "Bez postupka") {
+        parser('red',response.sudski.pravni_postupak);
+    } else {
+        parser('green',response.sudski.pravni_postupak)
     }
-    for (let i of response.operators) {
-        parser(i)
+
+
+    //Company capital check
+    parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
+
+    if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
+        parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN');
+    } else {
+        parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN')
+    }
+
+
+    parser('ok', response.nkd)
+    parser('ok', response.sudski.adresa_sjedista_tvrtke)
+    for (let i of response.osobe) {
+        parser('ok', i)
+    }
+    for (let i of response.contacts) {
+        contactsParser(i)
     }
     document.getElementById("spinner").remove()
     }
