@@ -3,8 +3,10 @@ from bs4 import BeautifulSoup
 import io
 import pytesseract
 from PIL import Image
+from threading import *
 
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"  # Windows tesseract location
+
 
 # Get Companywall profile address
 def profile_link(query):
@@ -15,6 +17,7 @@ def profile_link(query):
     for i in profile_link_selector:
         profile_link = i['href']
     return profile_link
+
 
 def nkd(soup):
     selector = '#body-content > div.container.bonitet-main-container > div > div.col-md-10 > div > div.col-md-7.pr-0-md > div:nth-child(8) > div.col-sm-8'
@@ -57,6 +60,7 @@ def contact_imgs(soup):
         pass
 
     return contact_img_links
+
 
 def ocr(img_addresses):
     brojevi_telefona = []

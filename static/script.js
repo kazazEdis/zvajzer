@@ -52,9 +52,13 @@ async function hackom(contact) {
     .then(response => response.json())
     .catch(error => console.log('error', error))
 
-    parser('ok',response.operator)
-    document.getElementById('0' + String(contact)).remove()
+    if (response['0' + String(contact)] !== "ISKON") {
+        parser('green','0' + String(contact) + ' ' + response['0' + String(contact)]);
+    } else {
+        parser('red','0' + String(contact) + ' ' + response['0' + String(contact)]);
+    }
 
+    document.getElementById('0' + String(contact)).remove()
 
     }
 
