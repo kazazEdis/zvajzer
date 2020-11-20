@@ -1,4 +1,3 @@
-
 function parser(status,output) { //Status can be ok, red, green
     let node = document.createElement("LI");
     if (status === 'ok'){
@@ -18,16 +17,17 @@ function parser(status,output) { //Status can be ok, red, green
 
 function contactsParser(contact) {
     let box = document.createElement("DIV")
-    box.style = "margin-top: 2%;"
-    box.id = String(contact);      
+    box.style = "margin-top: 1%;margin-bottom: 1px;"
+    box.id = String(contact);
+    box.className = "col"      
     let button = document.createElement("BUTTON");
     button.innerHTML = String(contact);
     button.type = "button";
     button.id = "hackom-button";
-    button.className = "btn btn-danger";
+    button.className = "col btn btn-danger";
     button.setAttribute('onclick', 'hackom(' + String(contact) + ')');
     box.appendChild(button)
-    document.getElementById("results").appendChild(box);
+    document.getElementById("contacts").appendChild(box);
     
 }
 
@@ -68,7 +68,7 @@ async function search() {
     body: urlencoded,
     };
 
-    const response = await fetch('/' + document.getElementById(oib.id).value, requestOptions)
+    const response = await fetch('/' + document.getElementById('oib').value, requestOptions)
     .then(response => response.json())
     .catch(error => console.log('error', error))
     console.log(response)
