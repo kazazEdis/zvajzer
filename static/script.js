@@ -18,10 +18,10 @@ function parser(status,output) { //Status can be ok, red, green
 function contactsParser(contact) {
     let box = document.createElement("DIV")
     box.style = "margin-top: 1%;margin-bottom: 1px;"
-    box.id = String(contact);
+    box.id = '0' + String(contact);
     box.className = "col"      
     let button = document.createElement("BUTTON");
-    button.innerHTML = String(contact);
+    button.innerHTML = '0' + String(contact);
     button.type = "button";
     button.id = "hackom-button";
     button.className = "col btn btn-danger";

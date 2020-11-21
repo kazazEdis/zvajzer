@@ -8,7 +8,7 @@ import simplejson as json
 def zvajzer(oib_ili_mbs):
     profile_link = companywall.profile_link(oib_ili_mbs)  # Companywall profile address
     html_doc = requests.get('http://www.simple-cw.hr' + profile_link).text  # HTML Request
-    soup = BeautifulSoup(html_doc, 'html5lib')  # HTML file
+    soup = BeautifulSoup(html_doc, 'lxml')  # HTML file
     nkd = companywall.nkd(soup)
     osobe = companywall.odgovorne_osobe(soup)
     linkovi = companywall.contact_imgs(soup)
