@@ -5,7 +5,7 @@ import pytesseract
 from PIL import Image
 
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"  # Windows tesseract location
-pytesseract.pytesseract.tesseract_cmd = ‘/app/.apt/usr/bin/tesseract’ 
+# pytesseract.pytesseract.tesseract_cmd = ‘/app/.apt/usr/bin/tesseract’ 
 
 # Get Companywall profile address
 def profile_link(query):
