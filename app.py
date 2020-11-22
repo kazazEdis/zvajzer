@@ -27,4 +27,4 @@ def hackom(contact_number):
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run()
