@@ -12,7 +12,6 @@ jsonify==0.5
 lxml==4.6.1
 MarkupSafe==1.1.1
 Pillow==8.0.1
-pkg-resources==0.0.0
 pytesseract==0.3.6
 requests==2.25.0
 simplejson==3.17.2
