@@ -1,3 +1,4 @@
+import os
 from main import zvajzer
 import simplejson as json
 from flask import Flask, jsonify, render_template, make_response
@@ -28,4 +29,4 @@ def hackom(contact_number):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True, host='0.0.0.0', port=port)
