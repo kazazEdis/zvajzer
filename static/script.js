@@ -1,3 +1,13 @@
+document.querySelector("#oib").addEventListener("keydown", function(event) {
+    if (event.keyCode == 13) {
+      search();
+    }
+  });
+
+document.querySelector("#zvajz-button").addEventListener("click", function(event) {
+    search();
+});
+
 function parser(status,output) { //Status can be ok, red, green
     let node = document.createElement("LI");
     if (status === 'ok'){
@@ -35,7 +45,7 @@ function addSpinner(elemId) {
     let node = document.createElement("DIV");
     node.id = "spinner"
     node.className = "spinner-border text-light";
-    node.style = "margin-left: 7.5%;margin-bottom: 2%;"
+    node.style = "margin-left: 7%;margin-bottom: 2%;"
     node.role = "status"
     let span = document.createElement('span')
     span.class = "sr-only"
@@ -50,7 +60,7 @@ async function hackom(contact) {
 
     const response = await fetch('/operator/' + String(contact), requestOptions)
     .then(response => response.json())
-    .catch(error => console.log('error', error))
+    .catch(error => console.error)
 
     if (response['0' + String(contact)] !== "ISKON") {
         parser('green','0' + String(contact) + ' ' + response['0' + String(contact)]);
@@ -64,7 +74,9 @@ async function hackom(contact) {
 
 
 async function search() {
-    addSpinner('results-box')
+    document.getElementById("results-box").innerHTML = '';
+    document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group col"></ul><div id="contacts" class="col"></div>';
+    addSpinner('results-box');
     var urlencoded = new URLSearchParams();
 
     var requestOptions = {
@@ -74,8 +86,9 @@ async function search() {
 
     const response = await fetch('/' + document.getElementById('oib').value, requestOptions)
     .then(response => response.json())
-    .catch(error => console.log('error', error))
+    .catch(error => console.error)
     console.log(response)
+
 
     parser('ok', response.sudski.skraceno_ime_tvrtke)
 
