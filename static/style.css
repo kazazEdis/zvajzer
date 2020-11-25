@@ -4,8 +4,9 @@ body {
 
 .main-container {
     padding-top: 5%;
-    padding-right: 30%!important;
-    padding-left: 30%!important;
+    padding-bottom: 5%;
+    padding-right: 20%!important;
+    padding-left: 20%!important;
 
 }
 
@@ -39,13 +40,13 @@ body {
     color: white;
     margin-left: 7.5%;
     padding-top: 5%;
-    padding-right: auto;
     width: 51%;
 }
 
 .search {
-    margin-left: 9%;
-    margin-right: 9%;
+    margin-top: 2%;
+    margin-left: 7%;
+    margin-right: 7%;
     width: 100%;
 }
 

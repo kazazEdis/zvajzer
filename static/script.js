@@ -89,34 +89,42 @@ async function search() {
     .catch(error => console.error)
     console.log(response)
 
-
-    parser('ok', response.sudski.skraceno_ime_tvrtke)
-
-    //Company status check
-    if (response.sudski.pravni_postupak !== "Bez postupka") {
-        parser('red',response.sudski.pravni_postupak);
+    if (response.sudski === null) {
+        parser('red',"Subjekt obrisan!");
+        document.getElementById("spinner").remove();
     } else {
-        parser('green',response.sudski.pravni_postupak)
-    }
+        parser('ok', response.sudski.skraceno_ime_tvrtke);
 
+        //Company status check
+        if (response.sudski.pravni_postupak !== "Bez postupka") {
+            parser('red',response.sudski.pravni_postupak);
+        } else {
+            parser('green',response.sudski.pravni_postupak);
+        }
+    
+    
+        //Company capital check
+        parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
+    
+        if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
+            parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN');
+        } else {
+            parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN')
+        }
+    
+    
+        parser('ok', response.nkd);
 
-    //Company capital check
-    parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
-
-    if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
-        parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN');
-    } else {
-        parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN')
-    }
-
-
-    parser('ok', response.nkd)
-    parser('ok', response.sudski.adresa_sjedista_tvrtke)
-    for (let i of response.osobe) {
-        parser('ok', i)
-    }
-    for (let i of response.contacts) {
-        contactsParser(i)
-    }
-    document.getElementById("spinner").remove()
+        if (response.web != null) {parser('ok', response.web);}
+        
+            
+        parser('ok', response.sudski.adresa_sjedista_tvrtke)
+        for (let i of response.osobe) {
+            parser('ok', i)
+        }
+        for (let i of response.contacts) {
+            contactsParser(i)
+        }
+        document.getElementById("spinner").remove()
+        }
     }

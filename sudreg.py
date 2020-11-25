@@ -22,7 +22,7 @@ def provjera(mbs):
             'pravni_postupak': json_object['postupci'][0]['vrsta']['znacenje'],
             'temeljni_kapital_tvrtke': "{:.2f}".format(json_object['temeljni_kapitali'][0]['iznos']),
             'adresa_sjedista_tvrtke': json_object['sjedista'][0]['naziv_naselja'] + ',' +
-            json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0]['kucni_broj'])
+            json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
 
         }
     else:
