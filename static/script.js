@@ -76,7 +76,8 @@ async function hackom(contact) {
 async function search() {
     document.getElementById("results-box").innerHTML = '';
     document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group col"></ul><div id="contacts" class="col"></div>';
-    addSpinner('results-box');
+    document.getElementById("search-svg").style.display = "none";
+    addSpinner('zvajz-button');
     var urlencoded = new URLSearchParams();
 
     var requestOptions = {
@@ -92,6 +93,7 @@ async function search() {
     if (response.sudski === null) {
         parser('red',"Subjekt obrisan!");
         document.getElementById("spinner").remove();
+        document.getElementById("search-svg").style.display = "block";
     } else {
         parser('ok', response.sudski.skraceno_ime_tvrtke);
 
@@ -126,5 +128,6 @@ async function search() {
             contactsParser(i)
         }
         document.getElementById("spinner").remove()
+        document.getElementById("search-svg").style.display = "block";
         }
     }

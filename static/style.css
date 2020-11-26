@@ -35,18 +35,15 @@ body {
   }
   
 #heading {
-    font-size: 5vw;
-    font-family: "Arial Black", Gadget, sans-serif;
-    color: white;
-    margin-left: 7.5%;
-    padding-top: 5%;
-    width: 51%;
+    margin-left: 4%;
+    padding-top: 2%;
+    width:  35%;
 }
 
 .search {
     margin-top: 2%;
-    margin-left: 7%;
-    margin-right: 7%;
+    margin-left: 4%;
+    margin-right: 4%;
     width: 100%;
 }
 
@@ -58,10 +55,7 @@ body {
 
 #results-box {
     display: block;
-    padding-bottom: 4%;
-    margin-top: 4%;
-    margin-right: 7.5%;
-    margin-left: 7.5%;
+    margin: 4%;
     width: 100%;
 }
 
