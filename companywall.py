@@ -27,17 +27,19 @@ def status(soup):
 
 def website(soup):
     try:
-        unstriped = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\t\t\tweb\r\n\t\t\t\t\t\t\t\t\t").find_next_sibling("div").text
-        striped = unstriped.lstrip("\n")
-        return striped
+        res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\t\t\tweb\r\n\t\t\t\t\t\t\t\t\t").find_next_sibling("div").text
+        res = res.replace('\n', '')
+        return res
     except AttributeError:
         pass
 
 
 def nkd(soup):
-    unstriped = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\tNKD:\r\n\t\t\t\t\t\t\t").find_next_sibling("div").text.rstrip(";")
-    striped = unstriped.lstrip("\n").rstrip(";")
-    return striped
+    badChars = ['\r', '\n', '\t', ';']
+    res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\tNKD:\r\n\t\t\t\t\t\t\t").find_next_sibling("div").text
+    for badChar in badChars:
+        res = res.replace(badChar,'')
+    return res
 
 
 def odgovorne_osobe(soup):
@@ -81,10 +83,15 @@ def ocr(img_addresses):
             response = requests.get('http://www.simple-cw.hr' + img_address)  # Dohvati sliku
             img = Image.open(io.BytesIO(response.content))  # Otvori sliku
             text = pytesseract.image_to_string(img).rstrip('\n\x0c')  # Konvertiraj sliku u text i obriši višak znakova
-            text_witouth_space = text.replace(' ', '').lstrip('0').split(",")  # Obriši razmake
+            text_witouth_space = text.replace(' ', '').replace('\n', ',').lstrip('0').split(",")  # Obriši razmake
+
             for number in text_witouth_space:
-                if str(number).lstrip('0') not in res:
-                    res.append(number)  # Dodaj broj na popis brojeva
+                n = str(number).lstrip('0')
+                ln = len(n)
+                if n not in res:
+                    if ln <= 10 and ln > 6:
+                        res.append(n)
+
         except:
             continue
     return res

@@ -44,5 +44,4 @@ def hakom_provjera(contact):
                 result = soup.findChild('td').text.strip()  # Extract operator info
             except AttributeError:
                 pass
-    print({str('0' + contact_number): result})
     return {str('0' + contact_number): result}

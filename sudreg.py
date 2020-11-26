@@ -16,14 +16,22 @@ def provjera(mbs):
     json_object = json.loads(response.content)
     json_data = json.dumps(json_object, indent=2)
     if json_data != 'null':
-        return {
-            'skraceno_ime_tvrtke': json_object['skracene_tvrtke'][0]['ime'],
-            'oib_tvrtke': json_object['oib'],
-            'pravni_postupak': json_object['postupci'][0]['vrsta']['znacenje'],
-            'temeljni_kapital_tvrtke': "{:.2f}".format(json_object['temeljni_kapitali'][0]['iznos']),
-            'adresa_sjedista_tvrtke': json_object['sjedista'][0]['naziv_naselja'] + ',' +
-            json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
+        companyName = json_object['skracene_tvrtke'][0]['ime']
+        taxNumber = json_object['oib']
+        status = json_object['postupci'][0]['vrsta']['znacenje']
+        address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
 
+        try:
+            capitalInvestment = json_object['temeljni_kapitali'][0]['iznos']
+        except KeyError:
+            capitalInvestment = None
+
+        return {
+            'skraceno_ime_tvrtke': companyName,
+            'oib_tvrtke': taxNumber,
+            'pravni_postupak': status,
+            'temeljni_kapital_tvrtke': capitalInvestment,
+            'adresa_sjedista_tvrtke': address
         }
     else:
         pass

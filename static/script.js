@@ -51,17 +51,7 @@ function contactsParser(contact) {
     
 }
 
-function addSpinner(elemId) {
-    let node = document.createElement("DIV");
-    node.id = "spinner"
-    node.className = "spinner-border text-light";
-    node.style = "margin-left: 7%;margin-bottom: 2%;"
-    node.role = "status"
-    let span = document.createElement('span')
-    span.class = "sr-only"
-    node.appendChild(span)
-    document.getElementById(elemId).appendChild(node);
-}
+
 
 async function hackom(contact) {
     let requestOptions = {
@@ -87,7 +77,8 @@ async function search() {
     document.getElementById("results-box").innerHTML = '';
     document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group col"></ul><div id="contacts" class="col"></div>';
     document.getElementById("search-svg").style.display = "none";
-    addSpinner('zvajz-button');
+    document.getElementById("spinner").style.display = "block";
+    
     var urlencoded = new URLSearchParams();
 
     var requestOptions = {
@@ -102,7 +93,7 @@ async function search() {
 
     if (response.sudski === null) {
         parser('red',"Subjekt obrisan!");
-        document.getElementById("spinner").remove();
+        document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";
     } else {
         parser('ok', response.sudski.skraceno_ime_tvrtke);
@@ -119,9 +110,11 @@ async function search() {
         parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
     
         if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
-            parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN');
+            parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN');
+        } else if (response.sudski.temeljni_kapital_tvrtke === null) {
+            parser('red', 'Kapital nije pronađen!')
         } else {
-            parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke + ' KN')
+            parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN')
         }
     
     
@@ -131,13 +124,14 @@ async function search() {
         
             
         parser('ok', response.sudski.adresa_sjedista_tvrtke)
+        
         for (let i of response.osobe) {
             parser('ok', i)
         }
         for (let i of response.contacts) {
             contactsParser(i)
         }
-        document.getElementById("spinner").remove()
+        document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";
         }
     }
