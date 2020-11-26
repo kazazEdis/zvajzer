@@ -35,7 +35,7 @@ def website(soup):
 
 
 def nkd(soup):
-    badChars = ['\r', '\n', '\t', ';']
+    badChars = ['\r', '\n', '\t', ';', '-']
     res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\tNKD:\r\n\t\t\t\t\t\t\t").find_next_sibling("div").text
     for badChar in badChars:
         res = res.replace(badChar,'')
