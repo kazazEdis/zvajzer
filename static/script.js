@@ -23,7 +23,17 @@ function parser(status,output) { //Status can be ok, red, green
     document.getElementById("results").appendChild(node);
 }
 
-
+function hrefParser(output) {
+    let node = document.createElement("LI");
+    node.className = "list-group-item list-group-item-secondary";
+    let a = document.createElement("A");
+    a.setAttribute("href", "https://" + String(output));
+    a.setAttribute("target", "_blank");
+    let textnode = document.createTextNode(output);  
+    node.appendChild(a);
+    a.appendChild(textnode);
+    document.getElementById("results").appendChild(node);
+}
 
 function contactsParser(contact) {
     let box = document.createElement("DIV")
@@ -117,7 +127,7 @@ async function search() {
     
         parser('ok', response.nkd);
 
-        if (response.web != null) {parser('ok', response.web);}
+        if (response.web != null) {hrefParser(response.web);}
         
             
         parser('ok', response.sudski.adresa_sjedista_tvrtke)
