@@ -18,13 +18,6 @@ def profile_link(query):
     return profile_link
 
 
-'''
-def status(soup):
-    select = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\tStatus\r\n\t\t\t\t\t\t\t").find_next_sibling("div").text
-    return select
-'''
-
-
 def website(soup):
     try:
         res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\t\t\tweb\r\n\t\t\t\t\t\t\t\t\t").find_next_sibling("div").text
@@ -33,6 +26,12 @@ def website(soup):
     except AttributeError:
         pass
 
+def size(soup):
+    badChars = ['\r', '\n', '\t']
+    res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\t\tVeličina poduzeća\r\n\t\t\t\t\t\t\t\t").find_next_sibling("div").text
+    for badChar in badChars:
+        res = res.replace(badChar,'')
+    return res
 
 def nkd(soup):
     badChars = ['\r', '\n', '\t', ';', '-']
@@ -59,12 +58,11 @@ def contact_imgs(soup):
     company_contacts_soup = soup.find('div', itemprop="telephone")
     try:
         contacts_soup = company_contacts_soup.findAll('img')
+        for i in contacts_soup:
+            contact_img_links.append(i['src'])
     except AttributeError:
-        contacts_soup = 'Company not found!'
-        return contacts_soup
-
-    for i in contacts_soup:
-        contact_img_links.append(i['src'])
+        pass
+    #  Brojevi Faxa
     try:
         company_fax_soup = soup.find('div', itemprop="faxNumber")
         contacts_fax = company_fax_soup.findAll('img')

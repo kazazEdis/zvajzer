@@ -13,12 +13,18 @@ def zvajzer(oib_ili_mbs):
         soup = BeautifulSoup(html_doc, 'lxml')  # HTML file
         web = companywall.website(soup)
         nkd = companywall.nkd(soup)
+        velicina = companywall.size(soup)
         osobe = companywall.odgovorne_osobe(soup)
         linkovi = companywall.contact_imgs(soup)
         brojevi = companywall.ocr(linkovi)
 
         # Konvertiraj sve u dictionary
-        converted_to_dict = {"sudski": sudski, "osobe": osobe, "contacts": brojevi, "nkd": nkd, "web": web}
+        converted_to_dict = {"sudski": sudski,
+                             "osobe": osobe,
+                             "contacts": brojevi,
+                             "nkd": nkd,
+                             "web": web,
+                             "velicina": velicina}
         json_data = json.dumps(converted_to_dict, ensure_ascii=False, encoding="utf-8", indent=4)
         return json_data
     else:

@@ -98,17 +98,17 @@ async function search() {
     } else {
         parser('ok', response.sudski.skraceno_ime_tvrtke);
 
-        //Company status check
+        //Company Tax number
+        parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
+
+        //Company status
         if (response.sudski.pravni_postupak !== "Bez postupka") {
             parser('red',response.sudski.pravni_postupak);
         } else {
             parser('green',response.sudski.pravni_postupak);
         }
     
-    
-        //Company capital check
-        parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
-    
+        //Capital investment
         if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
             parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN');
         } else if (response.sudski.temeljni_kapital_tvrtke === null) {
@@ -116,21 +116,33 @@ async function search() {
         } else {
             parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN')
         }
-    
-    
+        
+        //Company size
+        if (response.velicina != "Veliki") {
+            parser('green', 'Veličina: ' + response.velicina);
+        } else {
+            parser('red', 'Veličina: ' + response.velicina);
+        }
+        
+        //Services
         parser('ok', response.nkd);
 
+        //Website
         if (response.web != null) {hrefParser(response.web);}
         
-            
-        parser('ok', response.sudski.adresa_sjedista_tvrtke)
+        //Address    
+        parser('ok', response.sudski.adresa_sjedista_tvrtke);
         
+        //Personality
         for (let i of response.osobe) {
             parser('ok', i)
         }
+
+        //Contacts
         for (let i of response.contacts) {
             contactsParser(i)
         }
+
         document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";
         }
