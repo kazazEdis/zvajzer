@@ -28,9 +28,12 @@ def website(soup):
 
 def size(soup):
     badChars = ['\r', '\n', '\t']
-    res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\t\tVeličina poduzeća\r\n\t\t\t\t\t\t\t\t").find_next_sibling("div").text
-    for badChar in badChars:
-        res = res.replace(badChar,'')
+    try:
+        res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\t\tVeličina poduzeća\r\n\t\t\t\t\t\t\t\t").find_next_sibling("div").text
+        for badChar in badChars:
+            res = res.replace(badChar,'')
+    except AttributeError:
+            res = 'Nepoznato'
     return res
 
 def nkd(soup):
