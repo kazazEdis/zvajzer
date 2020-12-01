@@ -19,8 +19,10 @@ def provjera(mbs):
     print(json_data)
     '''
     if json_object != 'null':
-
-        tax_number = json_object['oib']
+        try:
+            tax_number = json_object['oib']
+        except TypeError:
+            tax_number = 'Subjekt brisan!'
         status = json_object['postupci'][0]['vrsta']['znacenje']
         address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
 
