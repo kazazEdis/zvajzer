@@ -21,11 +21,12 @@ def provjera(mbs):
     if json_object != 'null':
         try:
             tax_number = json_object['oib']
+            status = json_object['postupci'][0]['vrsta']['znacenje']
+            address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
         except TypeError:
-            tax_number = 'Subjekt brisan!'
-        status = json_object['postupci'][0]['vrsta']['znacenje']
-        address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
-
+            tax_number = 'Subjekt je brisan!'
+            status = 'Subjekt je brisan!'
+            address = 'Subjekt je brisan!'
         try:
             company_name = json_object['skracene_tvrtke'][0]['ime']
         except KeyError:
