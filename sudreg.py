@@ -23,26 +23,23 @@ def provjera(mbs):
             tax_number = json_object['oib']
             status = json_object['postupci'][0]['vrsta']['znacenje']
             address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
+'
+            try:
+                company_name = json_object['skracene_tvrtke'][0]['ime']
+            except KeyError:
+                company_name = json_object['tvrtke'][0]['ime']
+
+            try:
+                capital_investment = json_object['temeljni_kapitali'][0]['iznos']
+            except KeyError:
+                capital_investment = None
+
+            return {
+                'skraceno_ime_tvrtke': company_name,
+                'oib_tvrtke': tax_number,
+                'pravni_postupak': status,
+                'temeljni_kapital_tvrtke': capital_investment,
+                'adresa_sjedista_tvrtke': address
+            }
         except TypeError:
-            tax_number = 'Subjekt je brisan!'
-            status = 'Subjekt je brisan!'
-            address = 'Subjekt je brisan!'
-        try:
-            company_name = json_object['skracene_tvrtke'][0]['ime']
-        except KeyError:
-            company_name = json_object['tvrtke'][0]['ime']
-
-        try:
-            capital_investment = json_object['temeljni_kapitali'][0]['iznos']
-        except KeyError:
-            capital_investment = None
-
-        return {
-            'skraceno_ime_tvrtke': company_name,
-            'oib_tvrtke': tax_number,
-            'pravni_postupak': status,
-            'temeljni_kapital_tvrtke': capital_investment,
-            'adresa_sjedista_tvrtke': address
-        }
-    else:
-        pass
+            return {'oib_tvrtke': 'Subjekt je obrisan!'}
