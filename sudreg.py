@@ -23,7 +23,6 @@ def provjera(mbs):
             tax_number = json_object['oib']
             status = json_object['postupci'][0]['vrsta']['znacenje']
             address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
-'
             try:
                 company_name = json_object['skracene_tvrtke'][0]['ime']
             except KeyError:
