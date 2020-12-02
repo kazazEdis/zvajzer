@@ -42,4 +42,4 @@ def provjera(mbs):
                 'adresa_sjedista_tvrtke': address
             }
         except TypeError:
-            return {'oib_tvrtke': 'Subjekt je obrisan!'}
+            return None
