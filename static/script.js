@@ -89,7 +89,6 @@ async function search() {
     const response = await fetch('/' + document.getElementById('oib').value, requestOptions)
     .then(response => response.json())
     .catch(error => console.error)
-    console.log(response)
 
     if (response.sudski === null) {
         parser('red',"Subjekt obrisan!");
