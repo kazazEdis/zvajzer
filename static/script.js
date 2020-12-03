@@ -97,6 +97,7 @@ async function search() {
         document.getElementById("search-svg").style.display = "block";
     } else {
         parser('ok', response.sudski.skraceno_ime_tvrtke);
+        document.querySelector("title").innerText = "Ž: " + response.sudski.skraceno_ime_tvrtke
 
         //Company Tax number
         parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
