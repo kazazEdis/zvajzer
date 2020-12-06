@@ -8,14 +8,17 @@ document.querySelector("#zvajz-button").addEventListener("click", function(event
     search();
 });
 
-function parser(status,output) { //Status can be ok, red, green
+function parser(status,output, id) { //Status can be ok, red, green
     let node = document.createElement("LI");
     if (status === 'ok'){
         node.className = "list-group-item list-group-item-secondary";
+        node.id = String(id);
     } else if (status === 'red') {
         node.className = "list-group-item list-group-item-danger";
+        node.id = String(id);
     } else if (status === 'green') {
         node.className = "list-group-item list-group-item-success";
+        node.id = String(id);
     }
     
     let textnode = document.createTextNode(output);         
@@ -37,18 +40,17 @@ function hrefParser(output) {
 
 function contactsParser(contact) {
     let box = document.createElement("DIV")
-    box.style = "margin-top: 1%;margin-bottom: 1px;"
+    box.style = "margin-top: 1%;margin-bottom: 1px;";
     box.id = '0' + String(contact);
-    box.className = "col"      
+    box.className = "col";    
     let button = document.createElement("BUTTON");
     button.innerHTML = '0' + String(contact);
     button.type = "button";
     button.id = "hackom-button";
     button.className = "col btn btn-danger";
     button.setAttribute('onclick', 'hackom(' + String(contact) + ')');
-    box.appendChild(button)
-    document.getElementById("contacts").appendChild(box);
-    
+    box.appendChild(button);
+    document.getElementById("contacts").appendChild(box);    
 }
 
 
@@ -63,11 +65,40 @@ async function hackom(contact) {
     .catch(error => console.error)
 
     if (response['0' + String(contact)] !== "ISKON") {
-        parser('green','0' + String(contact) + ' ' + response['0' + String(contact)]);
+        parser('green','0' + String(contact) + ' ' + response['0' + String(contact)], contact);
     } else {
-        parser('red','0' + String(contact) + ' ' + response['0' + String(contact)]);
+        parser('red','0' + String(contact) + ' ' + response['0' + String(contact)], contact);
     }
 
+    if (response['operator_history'] != null) {
+        let table = document.createElement("TABLE");
+        table.className = "table table-striped table-dark";
+        let thead = document.createElement("THEAD");
+        thead.innerHTML = '<tr><th scope="col">Operator</th><th scope="col">Datum provjere</th></tr>'
+        let tbody = document.createElement("TBODY");
+        
+        
+        for (let item of response['operator_history']) {
+            operator = item[2]
+            timestamp = item[3]
+
+            let tr = document.createElement("TR");
+            tr.className = "table-striped";
+            let a = document.createElement("TD");
+            a.innerText = operator
+            let b = document.createElement("TD");
+            b.innerText = timestamp
+        
+            tr.appendChild(a);
+            tr.appendChild(b);
+            tbody.appendChild(tr);
+        }
+        
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        document.getElementById(String(contact)).appendChild(table);
+
+    }
     document.getElementById('0' + String(contact)).remove()
 
     }
