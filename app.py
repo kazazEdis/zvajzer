@@ -24,9 +24,9 @@ def user(oib_mbs):
 def hackom(contact_number):
     if len(contact_number) <= 10:
         operator = hakom_api.hakom_provjera(contact_number)
-        return operator
+        return make_response(jsonify(operator), 200)
     else:
-        return contact_number
+        return make_response(jsonify(contact_number), 200)
 
 
 if __name__ == "__main__":

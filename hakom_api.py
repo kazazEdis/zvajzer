@@ -4,6 +4,7 @@ import urllib.parse
 import urllib.error
 from time import sleep
 from bs4 import BeautifulSoup
+import sql_query
 
 
 def hakom_provjera(contact):
@@ -44,4 +45,30 @@ def hakom_provjera(contact):
                 result = soup.findChild('td').text.strip()  # Extract operator info
             except AttributeError:
                 pass
-    return {str('0' + contact_number): result}
+
+    # Update Database
+    today = sql_query.timestamp()
+    db_data = sql_query.read(contact_number)
+    try:
+        last_db_item = db_data[-1]
+    except IndexError:
+        pass
+    history = None
+    try:
+        if db_data[-1] != db_data[-2]:
+            history = db_data
+    except IndexError:
+        pass
+
+    # If there are no records, create one!
+    if len(db_data) == 0:
+        sql_query.create(contact_number, result, sql_query.timestamp())
+    # If there is a record but is the same as last one,update timestamp only!
+    elif last_db_item[2] == result:
+        sql_query.update(today, last_db_item[0])
+    # If operator has is changed since last check,add new record also add new record with alert.
+    elif last_db_item[2] != result:
+        sql_query.create(contact_number, result, sql_query.timestamp())
+        return {str('0' + contact_number): result, 'operator_history': history}
+
+    return {str('0' + contact_number): result, 'operator_history': history}
