@@ -8,7 +8,7 @@ import sql_query
 
 
 def hakom_provjera(contact):
-    contact_number = contact.lstrip('0')
+    contact_number = int(contact)
     # API Call
     headers = {
         'sec-ch-ua': '"Chromium";v="86", "\"Not\\A;Brand";v="99", "Google Chrome";v="86"',
@@ -45,7 +45,6 @@ def hakom_provjera(contact):
                 result = soup.findChild('td').text.strip()  # Extract operator info
             except AttributeError:
                 pass
-
     # Update Database
     today = sql_query.timestamp()
     db_data = sql_query.read(contact_number)
@@ -64,11 +63,11 @@ def hakom_provjera(contact):
     if len(db_data) == 0:
         sql_query.create(contact_number, result, sql_query.timestamp())
     # If there is a record but is the same as last one,update timestamp only!
-    elif last_db_item[2] == result:
+    elif last_db_item[2] == result and len(result) != 0 and result is not None:
         sql_query.update(today, last_db_item[0])
-    # If operator has is changed since last check,add new record also add new record with alert.
+    # If operator has is changed since last check,add new record also add new record!
     elif last_db_item[2] != result:
         sql_query.create(contact_number, result, sql_query.timestamp())
         return {str('0' + contact_number): result, 'operator_history': history}
 
-    return {str('0' + contact_number): result, 'operator_history': history}
+    return {str('0' + str(contact_number)): result, 'operator_history': history}

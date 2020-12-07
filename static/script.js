@@ -8,6 +8,13 @@ document.querySelector("#zvajz-button").addEventListener("click", function(event
     search();
 });
 
+document.querySelector("#operator").addEventListener("click", function(event) {
+    let inp = prompt("Broj telefona:")
+    while(inp.charAt(0) === '0') { inp = inp.substring(1); }
+    hackom(inp)
+    
+});
+
 function parser(status,output, id) { //Status can be ok, red, green
     let node = document.createElement("LI");
     if (status === 'ok'){
@@ -56,6 +63,12 @@ function contactsParser(contact) {
 
 
 async function hackom(contact) {
+
+    try {
+        document.getElementById('0' + String(contact)).remove()
+      }
+      catch(err) {}
+
     let requestOptions = {
     method: 'GET',
     };
@@ -99,14 +112,12 @@ async function hackom(contact) {
         document.getElementById(String(contact)).appendChild(table);
 
     }
-    document.getElementById('0' + String(contact)).remove()
-
     }
 
 
 async function search() {
     document.getElementById("results-box").innerHTML = '';
-    document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group col"></ul><div id="contacts" class="col"></div>';
+    document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="col"></div>';
     document.getElementById("search-svg").style.display = "none";
     document.getElementById("spinner").style.display = "block";
     
@@ -150,7 +161,7 @@ async function search() {
         
         //Company size
         if (response.velicina != "Veliki") {
-            parser('green', 'Veličina: ' + response.velicina);
+            parser('ok', 'Veličina: ' + response.velicina);
         } else {
             parser('red', 'Veličina: ' + response.velicina);
         }
@@ -177,4 +188,5 @@ async function search() {
         document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";
         }
+    particlesJS.load("particles-js", "/static/particles.json");
     }
