@@ -188,5 +188,4 @@ async function search() {
         document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";
         }
-    particlesJS.load("particles-js", "/static/particles.json");
     }
