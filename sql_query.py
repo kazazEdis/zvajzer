@@ -3,7 +3,7 @@ from datetime import date
 
 
 def timestamp():
-    return date.today().isoformat()
+    return date.today().strftime("%d-%m-%Y")
 
 
 def create(contact_number, operator, timestmp):
@@ -23,19 +23,4 @@ def read(contact_number):
     conn.commit()
     conn.close()
     return results
-
-
-def update(timestmp, rowid):
-    conn = sqlite3.connect('history.db')
-    c = conn.cursor()
-    op = [(timestmp, rowid)]
-    c.executemany('UPDATE operators SET timestamp=? WHERE rowid=?', op)
-    conn.commit()
-    conn.close()
-
-
-# create(921213592, 'TOMATO', timestamp())
-# print(read(921213592))
-# update('TELE2', timestamp(), 1)
-
 

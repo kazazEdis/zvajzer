@@ -18,37 +18,27 @@
           <div id="main-square" class="row">
             <div class="container">
               <div class="row">
-                <div class="col"></div>
-                <div class="col">
-                  <img id="heading" src="{{ url_for('static', filename='logo.svg') }}" aria-hidden="true">
+                <div class="col-5">
+                  <img id="heading" class="ml-3 mt-1" src="{{ url_for('static', filename='logo.svg') }}" aria-hidden="true">
                 </div>
-                <div class="col"></div>
               </div>
             </div>
-
-            <div class="container mt-2">
-              <div class="row m-auto">
-                <div class="col">
-                  <input class="form-control" id="oib" type="number" placeholder="Matični broj ili OIB firme...">
-                </div>
-                <div class="col">
-                  <button id="operator" type="button" class="btn btn-light float-right">
-                    <img src="{{ url_for('static', filename='operator.png') }}" height="15px" aria-hidden="true">
-                  </button>
-                </div>
-                <div class="w-100"></div>
-                <div class="col">
-                  <button id="zvajz-button" type="button" class="btn btn-primary mt-2">
-                    <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
-                    <img id="search-svg" src="{{ url_for('static', filename='search.svg') }}" height="15px" aria-hidden="true">
-                  </button>
-                </div>
-                <div class="col">Column</div>
-              </div>
+            <div class="col d-flex align-items-start m-2">
+              <button id="zvajz-button" type="button" class="btn btn-primary mr-2">
+                <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                <img id="search-svg" src="{{ url_for('static', filename='search.svg') }}" height="15px" aria-hidden="true">
+              </button>
+              <input class="form-control" id="oib" type="number" placeholder="Matični broj ili OIB firme...">
             </div>
-            <div id="results-box" class="row">
+            <div id="results-box" class="row mx-auto">
               <ul id="results" class="list-group"></ul>
-              <div id="contacts" class="col"></div>
+              <div id="contacts" class="row d-flex align-items-start mr-1"></div>
+            </div>
+            <div class="col d-flex align-items-start m-2">
+              <input class="form-control" id="operator-box" type="number" placeholder="Provjera operatora">
+              <button id="operator" type="button" class="btn btn-light float-right ml-2">
+                <img src="{{ url_for('static', filename='operator.png') }}" height="15px" aria-hidden="true">
+              </button>
             </div>
           </div>
         </div>

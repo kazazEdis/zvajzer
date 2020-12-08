@@ -16,10 +16,6 @@ body {
     height:100%;
     z-index:-1;
 }
-.row {
-    margin-left: auto;
-    margin-right: auto;
-}
 
 #main-square {
     height: auto;
@@ -27,24 +23,12 @@ body {
   }
   
 
-
-.search {
-    margin-top: 2%;
-    margin-left: 4%;
-    margin-right: 4%;
-    width: 100%;
-}
-
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     margin: 0;
-}
-
-#zvajz-button {
-    margin-top: 1%;
 }
 
 #results-box {
@@ -55,10 +39,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 #results {
     color: black;
-    width: 80%;
-    margin-left: 0%;
-    margin-right: 0%;
-    width: 100%;
 }
 
 

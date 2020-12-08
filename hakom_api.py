@@ -62,12 +62,9 @@ def hakom_provjera(contact):
     # If there are no records, create one!
     if len(db_data) == 0:
         sql_query.create(contact_number, result, sql_query.timestamp())
-    # If there is a record but is the same as last one,update timestamp only!
-    elif last_db_item[2] == result and len(result) != 0 and result is not None:
-        sql_query.update(today, last_db_item[0])
     # If operator has is changed since last check,add new record also add new record!
     elif last_db_item[2] != result:
         sql_query.create(contact_number, result, sql_query.timestamp())
-        return {str('0' + contact_number): result, 'operator_history': history}
+        return {'0' + str(contact_number): result, 'operator_history': history}
 
-    return {str('0' + str(contact_number)): result, 'operator_history': history}
+    return {'0' + str(contact_number): result, 'operator_history': history}

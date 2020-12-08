@@ -4,28 +4,37 @@ document.querySelector("#oib").addEventListener("keydown", function(event) {
     }
   });
 
-document.querySelector("#zvajz-button").addEventListener("click", function(event) {
+
+document.querySelector("#zvajz-button").addEventListener("click", ()=> {
     search();
 });
 
-document.querySelector("#operator").addEventListener("click", function(event) {
-    let inp = prompt("Broj telefona:")
+document.querySelector("#operator").addEventListener("click", ()=> {
+    let inp = document.getElementById('operator-box').value
     while(inp.charAt(0) === '0') { inp = inp.substring(1); }
     hackom(inp)
-    
 });
+
+document.querySelector("#operator-box").addEventListener("keydown", function(event) {
+    if (event.keyCode == 13) {
+      let inp = document.getElementById('operator-box').value
+    while(inp.charAt(0) === '0') { inp = inp.substring(1); }
+    hackom(inp)
+    }
+  });
+
 
 function parser(status,output, id) { //Status can be ok, red, green
     let node = document.createElement("LI");
     if (status === 'ok'){
-        node.className = "list-group-item list-group-item-secondary";
-        node.id = String(id);
+        node.className = "list-group-item list-group-item-secondary mx-3";
+        if (id != null) { node.id = String(id); }
     } else if (status === 'red') {
-        node.className = "list-group-item list-group-item-danger";
-        node.id = String(id);
+        node.className = "list-group-item list-group-item-danger mx-3";
+        if (id != null) { node.id = String(id); }
     } else if (status === 'green') {
-        node.className = "list-group-item list-group-item-success";
-        node.id = String(id);
+        node.className = "list-group-item list-group-item-success mx-3";
+        if (id != null) { node.id = String(id); }
     }
     
     let textnode = document.createTextNode(output);         
@@ -47,9 +56,8 @@ function hrefParser(output) {
 
 function contactsParser(contact) {
     let box = document.createElement("DIV")
-    box.style = "margin-top: 1%;margin-bottom: 1px;";
     box.id = '0' + String(contact);
-    box.className = "col";    
+    box.className = "col mt-1";    
     let button = document.createElement("BUTTON");
     button.innerHTML = '0' + String(contact);
     button.type = "button";
@@ -76,6 +84,7 @@ async function hackom(contact) {
     const response = await fetch('/operator/' + String(contact), requestOptions)
     .then(response => response.json())
     .catch(error => console.error)
+    console.log(response);
 
     if (response['0' + String(contact)] !== "ISKON") {
         parser('green','0' + String(contact) + ' ' + response['0' + String(contact)], contact);
@@ -117,7 +126,7 @@ async function hackom(contact) {
 
 async function search() {
     document.getElementById("results-box").innerHTML = '';
-    document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="col"></div>';
+    document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
     document.getElementById("search-svg").style.display = "none";
     document.getElementById("spinner").style.display = "block";
     
@@ -184,7 +193,7 @@ async function search() {
         for (let i of response.contacts) {
             contactsParser(i)
         }
-
+        
         document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";
         }
