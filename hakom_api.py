@@ -60,11 +60,14 @@ def hakom_provjera(contact):
         pass
 
     # If there are no records, create one!
-    if len(db_data) == 0:
-        sql_query.create(contact_number, result, sql_query.timestamp())
-    # If operator has is changed since last check,add new record also add new record!
-    elif last_db_item[2] != result:
-        sql_query.create(contact_number, result, sql_query.timestamp())
-        return {'0' + str(contact_number): result, 'operator_history': history}
+    try:
+        if len(db_data) == 0 and len(result) != 0:
+            sql_query.create(contact_number, result, sql_query.timestamp())
+        # If operator has is changed since last check,add new record also add new record!
+        elif last_db_item[2] != result:
+            sql_query.create(contact_number, result, sql_query.timestamp())
+            return {'0' + str(contact_number): result, 'operator_history': history}
+    except UnboundLocalError:
+        pass
 
     return {'0' + str(contact_number): result, 'operator_history': history}
