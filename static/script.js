@@ -122,79 +122,76 @@ async function hackom(contact) {
 
 
 async function search() {
-    let q = document.getElementById('oib').value.length
-    if (q < 6) {
-        document.getElementById("results-box").innerHTML = '';
-        document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
-        document.getElementById("search-svg").style.display = "none";
-        document.getElementById("spinner").style.display = "block";
-        
-        var urlencoded = new URLSearchParams();
+    document.getElementById("results-box").innerHTML = '';
+    document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
+    document.getElementById("search-svg").style.display = "none";
+    document.getElementById("spinner").style.display = "block";
 
-        var requestOptions = {
-        method: 'POST',
-        body: urlencoded,
-        };
+    var urlencoded = new URLSearchParams();
 
-        const response = await fetch('/' + q, requestOptions)
-        .then(response => response.json())
-        .catch(error => console.error)
+    var requestOptions = {
+    method: 'POST',
+    body: urlencoded,
+    };
 
-        if (response.sudski === null) {
-            parser('red',"Subjekt obrisan!");
-            document.getElementById("spinner").style.display = "none";
-            document.getElementById("search-svg").style.display = "block";
+    const response = await fetch('/' + document.getElementById('oib').value, requestOptions)
+    .then(response => response.json())
+    .catch(error => console.error)
+
+    if (response.sudski === null) {
+        parser('red',"Subjekt obrisan!");
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("search-svg").style.display = "block";
+    } else {
+        parser('ok', response.sudski.skraceno_ime_tvrtke);
+        document.querySelector("title").innerText = "Ž: " + response.sudski.skraceno_ime_tvrtke
+
+        //Company Tax number
+        parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
+
+        //Company status
+        if (response.sudski.pravni_postupak !== "Bez postupka") {
+            parser('red',response.sudski.pravni_postupak);
         } else {
-            parser('ok', response.sudski.skraceno_ime_tvrtke);
-            document.querySelector("title").innerText = "Ž: " + response.sudski.skraceno_ime_tvrtke
-
-            //Company Tax number
-            parser('ok', 'OIB: ' + response.sudski.oib_tvrtke)
-
-            //Company status
-            if (response.sudski.pravni_postupak !== "Bez postupka") {
-                parser('red',response.sudski.pravni_postupak);
-            } else {
-                parser('green',response.sudski.pravni_postupak);
-            }
-        
-            //Capital investment
-            if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
-                parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN');
-            } else if (response.sudski.temeljni_kapital_tvrtke === null) {
-                parser('red', 'Kapital nije pronađen!')
-            } else {
-                parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN')
-            }
-            
-            //Company size
-            if (response.velicina != "Veliki") {
-                parser('ok', 'Veličina: ' + response.velicina);
-            } else {
-                parser('red', 'Veličina: ' + response.velicina);
-            }
-            
-            //Services
-            parser('ok', response.nkd);
-
-            //Website
-            if (response.web != null) {hrefParser(response.web);}
-            
-            //Address    
-            parser('ok', response.sudski.adresa_sjedista_tvrtke);
-            
-            //Personality
-            for (let i of response.osobe) {
-                parser('ok', i)
-            }
-
-            //Contacts
-            for (let i of response.contacts) {
-                contactsParser(i)
-            }
-            
-            document.getElementById("spinner").style.display = "none";
-            document.getElementById("search-svg").style.display = "block";
+            parser('green',response.sudski.pravni_postupak);
         }
+
+        //Capital investment
+        if (response.sudski.temeljni_kapital_tvrtke > 5000000) {
+            parser('red','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN');
+        } else if (response.sudski.temeljni_kapital_tvrtke === null) {
+            parser('red', 'Kapital nije pronađen!')
+        } else {
+            parser('green','Kapital: ' + response.sudski.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN')
+        }
+
+        //Company size
+        if (response.velicina != "Veliki") {
+            parser('ok', 'Veličina: ' + response.velicina);
+        } else {
+            parser('red', 'Veličina: ' + response.velicina);
+        }
+
+        //Services
+        parser('ok', response.nkd);
+
+        //Website
+        if (response.web != null) {hrefParser(response.web);}
+
+        //Address    
+        parser('ok', response.sudski.adresa_sjedista_tvrtke);
+
+        //Personality
+        for (let i of response.osobe) {
+            parser('ok', i)
+        }
+
+        //Contacts
+        for (let i of response.contacts) {
+            contactsParser(i)
+        }
+
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("search-svg").style.display = "block";
     }
 }
