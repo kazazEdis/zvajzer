@@ -13,6 +13,7 @@ document.querySelector("#operator").addEventListener("click", ()=> {
     let inp = document.getElementById('operator-box').value
     while(inp.charAt(0) === '0') { inp = inp.substring(1); }
     hackom(inp)
+    document.getElementById('operator-box').value = ''
 });
 
 document.querySelector("#operator-box").addEventListener("keydown", function(event) {
@@ -20,6 +21,7 @@ document.querySelector("#operator-box").addEventListener("keydown", function(eve
       let inp = document.getElementById('operator-box').value
     while(inp.charAt(0) === '0') { inp = inp.substring(1); }
     hackom(inp)
+    document.getElementById('operator-box').value = ''
     }
   });
 
@@ -44,7 +46,7 @@ function parser(status,output, id) { //Status can be ok, red, green
 
 function hrefParser(output) {
     let node = document.createElement("LI");
-    node.className = "list-group-item list-group-item-secondary";
+    node.className = "list-group-item list-group-item-secondary mx-3";
     let a = document.createElement("A");
     a.setAttribute("href", "https://" + String(output));
     a.setAttribute("target", "_blank");
