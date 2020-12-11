@@ -124,6 +124,7 @@ async function hackom(contact) {
 
 
 async function search() {
+    document.querySelector("title").innerText = 'Žvajzer'
     document.getElementById("results-box").innerHTML = '';
     document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
     document.getElementById("search-svg").style.display = "none";
@@ -175,7 +176,8 @@ async function search() {
         }
 
         //Services
-        parser('ok', response.nkd);
+        if (response.nkd != null) {parser('ok', response.nkd);}
+        
 
         //Website
         if (response.web != null) {hrefParser(response.web);}

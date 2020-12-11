@@ -38,9 +38,12 @@ def size(soup):
 
 def nkd(soup):
     badChars = ['\r', '\n', '\t', ';', '-']
-    res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\tNKD:\r\n\t\t\t\t\t\t\t").find_next_sibling("div").text
-    for badChar in badChars:
-        res = res.replace(badChar,'')
+    try:
+        res = soup.find('div', {'class': "col-sm-4"}, text="\r\n\t\t\t\t\t\t\t\tNKD:\r\n\t\t\t\t\t\t\t").find_next_sibling("div").text
+        for badChar in badChars:
+            res = res.replace(badChar,'')    
+    except AttributeError:
+        res = None
     return res
 
 
@@ -87,12 +90,11 @@ def ocr(img_addresses):
             text_witouth_space = text.replace(' ', '').replace('\n', ',').lstrip('0').split(",")  # Obriši razmake
 
             for number in text_witouth_space:
-                n = str(number).lstrip('0')
+                n = str(number).lstrip('0').replace('(','').replace(')','')
                 ln = len(n)
                 if n not in res:
                     if ln <= 10 and ln > 6:
                         res.append(n)
-
         except:
             continue
     return res

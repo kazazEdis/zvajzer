@@ -15,12 +15,13 @@ def provjera(mbs):
     response = requests.request("GET", url, headers=headers)
     json_object = json.loads(response.content)
     '''
+    # Test api response
     json_data = json.dumps(json_object, indent=2)
     print(json_data)
     '''
     if json_object != 'null':
         try:
-            tax_number = json_object['oib']
+            tax_number = json_object['potpuni_oib']
             status = json_object['postupci'][0]['vrsta']['znacenje']
             address = json_object['sjedista'][0]['naziv_naselja'] + ',' + json_object['sjedista'][0]['ulica'] + ' ' + str(json_object['sjedista'][0].get('kucni_broj', ''))
             try:

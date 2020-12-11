@@ -31,6 +31,11 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+.spinner-border-sm {
+    width: 22px!important;
+    height: 22px!important;
+}
+
 #results-box {
     display: block;
     margin: 4%;
