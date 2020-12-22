@@ -70,6 +70,7 @@ def hakom_provjera(contact):
             database.update({'kontakt': contact},
                             {'$push': {'operator_history': {'operator': operator,
                                                             'timestamp': timestamp}}})
-        operator_history.append({'operator': operator, 'timestamp': timestamp})
+            operator_history.pop(-1)
+            operator_history.append({'operator': operator, 'timestamp': timestamp})
     return {'operator': operator,
             'operator_history': operator_history}
