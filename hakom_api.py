@@ -61,6 +61,7 @@ def hakom_provjera(contact):
     if len(operator_history) <= 1 or operator != operator_history[-1]['operator']:
         database.update({'kontakt': contact},
                         {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+        operator_history.append({'operator': operator, 'timestamp': timestamp})
 
     # if operator is still the same, update timestamp
     elif len(operator_history) >= 2:
@@ -69,7 +70,6 @@ def hakom_provjera(contact):
             database.update({'kontakt': contact},
                             {'$push': {'operator_history': {'operator': operator,
                                                             'timestamp': timestamp}}})
-
+        operator_history.append({'operator': operator, 'timestamp': timestamp})
     return {'operator': operator,
-            'operator_history': operator_history.append({'operator': operator,
-                                                         'timestamp': timestamp})}
+            'operator_history': operator_history}
