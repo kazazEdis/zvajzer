@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from datetime import date
 import database
 
+
 def hakom_provjera(contact):
     contact_number = int(contact)
     # API Call
@@ -59,13 +60,16 @@ def hakom_provjera(contact):
     # UPDATE OPERATOR HISTORY
     if len(operator_history) <= 1 or operator != operator_history[-1]['operator']:
         database.update({'kontakt': contact},
-                               {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+                        {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
 
     # if operator is still the same, update timestamp
     elif len(operator_history) >= 2:
         if operator == operator_history[-1]['operator'] and operator_history[-1]['operator'] == operator_history[-2]['operator']:
-            database.update({'kontakt': contact}, {'$pop': {'operator_history': -1}})
+            database.update({'kontakt': contact}, {'$pop': {'operator_history': -1}})  # remove last item
             database.update({'kontakt': contact},
-                                   {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+                            {'$push': {'operator_history': {'operator': operator,
+                                                            'timestamp': timestamp}}})
 
-    return {'operator': operator, 'operator_history': operator_history}
+    return {'operator': operator,
+            'operator_history': operator_history.append({'operator': operator,
+                                                         'timestamp': timestamp})}
