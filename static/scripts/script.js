@@ -85,14 +85,15 @@ async function hackom(contact) {
     const response = await fetch('/operator/' + String(contact), requestOptions)
     .then(response => response.json())
     .catch(error => console.error)
+    
 
-    if (response['0' + String(contact)] !== "ISKON") {
-        parser('green','0' + String(contact) + ' ' + response['0' + String(contact)], contact);
+    if (response.operator !== "ISKON") {
+        parser('green','0' + String(contact) + ' ' + response.operator, contact);
     } else {
-        parser('red','0' + String(contact) + ' ' + response['0' + String(contact)], contact);
+        parser('red','0' + String(contact) + ' ' + response.operator, contact);
     }
 
-    if (response['operator_history'] != null) {
+    if (response['operator_history'].length > 1) {
         let table = document.createElement("TABLE");
         table.className = "table table-striped table-dark";
         let thead = document.createElement("THEAD");
@@ -101,8 +102,8 @@ async function hackom(contact) {
         
         
         for (let item of response['operator_history']) {
-            operator = item[2]
-            timestamp = item[3]
+            operator = item.operator
+            timestamp = item.timestamp
 
             let tr = document.createElement("TR");
             tr.className = "table-striped";
@@ -137,9 +138,10 @@ async function search() {
     body: urlencoded,
     };
 
-    const response = await fetch('/' + document.getElementById('oib').value, requestOptions)
+    let response = await fetch('/' + document.getElementById('oib').value, requestOptions)
     .then(response => response.json())
     .catch(error => console.error)
+    response = response[String(document.querySelector("#oib").value)]
 
     if (response.sudski === null) {
         parser('red',"Subjekt obrisan!");
@@ -183,7 +185,7 @@ async function search() {
         if (response.web != null) {hrefParser(response.web);}
 
         //Address    
-        parser('ok', response.sudski.adresa_sjedista_tvrtke);
+        parser('ok', String(response.sudski.naselje) + ' , ' + String(response.sudski.ulica));
 
         //Personality
         for (let i of response.osobe) {

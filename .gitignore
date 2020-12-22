@@ -2,3 +2,6 @@ __pycache__
 venv
 .idea
 .vscode
+.env
+cmd.exe.lnk
+scraper.py

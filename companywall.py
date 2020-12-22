@@ -53,7 +53,7 @@ def odgovorne_osobe(soup):
     odgovorne_osobe = []
     for i in company_odgovorne_osobe_soup:
         a = i.text.replace('  ', '')
-        b = a.replace('\n', '')
+        b = a.replace('\n', '').replace('\r', '')
         odgovorne_osobe.append(b)
     return odgovorne_osobe
 
@@ -90,7 +90,7 @@ def ocr(img_addresses):
             text_witouth_space = text.replace(' ', '').replace('\n', ',').lstrip('0').split(",")  # Obriši razmake
 
             for number in text_witouth_space:
-                n = str(number).lstrip('0').replace('(','').replace(')','')
+                n = str(number).lstrip('0').replace('(','').replace(')','').replace('-','').replace('/','') # todo: uljepšaj ovo
                 ln = len(n)
                 if n not in res:
                     if ln <= 10 and ln > 6:

@@ -4,8 +4,8 @@ import urllib.parse
 import urllib.error
 from time import sleep
 from bs4 import BeautifulSoup
-import sql_query
-
+from datetime import date
+import database
 
 def hakom_provjera(contact):
     contact_number = int(contact)
@@ -33,41 +33,39 @@ def hakom_provjera(contact):
     conn.request("GET", "https://www.hakom.hr/default.aspx?id=62", body, headers)  # Send API request
     data = conn.getresponse()  # Save API response
     soup = BeautifulSoup(data, features="html.parser", from_encoding='utf-8')  # Format to BeautifulSoup Object
-    result = soup.findChild('td').text.strip()  # Extract operator info
-    if result == 'Molimo pokušajte ponovo za 1 minutu...':
-        while result == 'Molimo pokušajte ponovo za 1 minutu...':
+    operator = soup.findChild('td').text.strip()  # Extract operator info
+    if operator == 'Molimo pokušajte ponovo za 1 minutu...':
+        while operator == 'Molimo pokušajte ponovo za 1 minutu...':
             print('Loading...')
             sleep(60)
             conn.request("POST", "https://www.hakom.hr/default.aspx?id=62", body, headers)  # Send API request
             data = conn.getresponse()  # Save API response
             soup = BeautifulSoup(data, features="html.parser", from_encoding='utf-8')  # Format to BeautifulSoup Object
             try:
-                result = soup.findChild('td').text.strip()  # Extract operator info
+                operator = soup.findChild('td').text.strip()  # Extract operator info
             except AttributeError:
                 pass
     # Update Database
-    today = sql_query.timestamp()
-    db_data = sql_query.read(contact_number)
     try:
-        last_db_item = db_data[-1]
-    except IndexError:
-        pass
-    history = None
-    try:
-        if db_data[-1] != db_data[-2]:
-            history = db_data
-    except IndexError:
-        pass
+        record = database.read({'kontakt': contact})
+        operator_history = record['operator_history']
+    except TypeError:
+        database.create({'kontakt': contact, 'operator_history': []})
+        record = database.read({'kontakt': contact})
+        operator_history = record['operator_history']
 
-    # If there are no records, create one!
-    try:
-        if len(db_data) == 0 and len(result) != 0:
-            sql_query.create(contact_number, result, sql_query.timestamp())
-        # If operator has is changed since last check,add new record also add new record!
-        elif last_db_item[2] != result:
-            sql_query.create(contact_number, result, sql_query.timestamp())
-            return {'0' + str(contact_number): result, 'operator_history': history}
-    except UnboundLocalError:
-        pass
+    timestamp = date.today().strftime("%d-%m-%Y")
 
-    return {'0' + str(contact_number): result, 'operator_history': history}
+    # UPDATE OPERATOR HISTORY
+    if len(operator_history) <= 1 or operator != operator_history[-1]['operator']:
+        database.update({'kontakt': contact},
+                               {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+
+    # if operator is still the same, update timestamp
+    elif len(operator_history) >= 2:
+        if operator == operator_history[-1]['operator'] and operator_history[-1]['operator'] == operator_history[-2]['operator']:
+            database.update({'kontakt': contact}, {'$pop': {'operator_history': -1}})
+            database.update({'kontakt': contact},
+                                   {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+
+    return {'operator': operator, 'operator_history': operator_history}
