@@ -23,3 +23,7 @@ def update(filter, update,):
 def company(oib):
     collection = db.company
     return collection.find_one({"_id": oib})
+
+def new_company(data):
+    collection = db['company']
+    collection.insert(data)
