@@ -34,7 +34,8 @@ def hakom_provjera(contact):
     except AttributeError:
         pass
     if operator == 'Molimo pokušajte ponovo za 1 minutu...':
-        print('Getting new IP')
+        operator = None
+        print('Getting new IP!')
         proxy.renew_tor_ip()
         sleep(2)
         try:
