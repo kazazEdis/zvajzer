@@ -8,8 +8,8 @@ def get_current_ip():
 
     # TO Request URL with SOCKS over TOR
     session.proxies = {}
-    session.proxies['http']='socks5h://localhost:9050'
-    session.proxies['https']='socks5h://localhost:9050'
+    session.proxies['http']='socks5h://localhost:9051'
+    session.proxies['https']='socks5h://localhost:9051'
 
     try:
         r = session.get('http://ifconfig.me')
@@ -21,6 +21,6 @@ def get_current_ip():
 
 def renew_tor_ip():
     with Controller.from_port(port=9051) as controller:
-        controller.authenticate(password='kamikami')
+        controller.authenticate(password='torProxy@123')
         controller.signal(Signal.NEWNYM)
 
