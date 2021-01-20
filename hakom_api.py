@@ -26,8 +26,9 @@ def hakom_provjera(contact):
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
     }
 
-    proxies = {'http': 'socks5h://localhost:9050', 'https': 'socks5h://localhost:9050'}
-    data = requests.request("POST", url, headers=headers, data=payload, proxies=proxies)
+    session = requests.session()
+    session.proxies = {'http': 'socks5h://localhost:9050', 'https': 'socks5h://localhost:9050'}
+    data = session.request("POST", url, headers=headers, data=payload)
     soup = BeautifulSoup(data.text, features="html.parser")  # Format to BeautifulSoup Object
     operator = 'Molimo pokušajte ponovo za 1 minutu...'
     try:
@@ -39,7 +40,7 @@ def hakom_provjera(contact):
         print(f'Bad IP: {proxy.get_current_ip()}, Getting new IP!')
         proxy.renew_tor_ip()
         sleep(5)
-        data = requests.request("POST", url, headers=headers, data=payload, proxies=proxies)
+        data = session.request("POST", url, headers=headers, data=payload)
         soup = BeautifulSoup(data.text, features="html.parser")
         operator = soup.findChild('td').text.strip()
 
