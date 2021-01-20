@@ -1,7 +1,11 @@
+import os
+from settings import load_env
 import requests
 from stem import Signal
 from stem.control import Controller
 
+load_env()
+TOR_PASS = os.getenv("TOR_PASS")
 
 def get_current_ip():
     session = requests.session()
@@ -21,6 +25,6 @@ def get_current_ip():
 
 def renew_tor_ip():
     with Controller.from_port(port=9051) as controller:
-        controller.authenticate(password='torProxy@123')
+        controller.authenticate(password=TOR_PASS)
         controller.signal(Signal.NEWNYM)
 
