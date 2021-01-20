@@ -6,7 +6,7 @@ from flask_sslify import SSLify
 import hakom_api
 
 app = Flask(__name__)
-# sslify = SSLify(app)
+sslify = SSLify(app)
 
 
 @app.route("/")
@@ -30,6 +30,5 @@ def hackom(contact_number):
 
 
 if __name__ == "__main__":
-    app.run(threaded=True, port=5000)
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(debug=True, host='localhost', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host='localhost', port=port)
