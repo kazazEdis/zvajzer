@@ -6,7 +6,6 @@ from datetime import date
 import database
 import proxy
 
-
 def hakom_provjera(contact):
     try:
         contact_number = int(contact)
@@ -27,7 +26,11 @@ def hakom_provjera(contact):
     }
 
     session = requests.session()
-    session.proxies = {'http': 'socks5h://localhost:9050', 'https': 'socks5h://localhost:9050'}
+
+    # TO Request URL with SOCKS over TOR
+    session.proxies = {}
+    session.proxies['http']='socks5h://localhost:9050'
+    session.proxies['https']='socks5h://localhost:9050'
     data = session.request("POST", url, headers=headers, data=payload)
     soup = BeautifulSoup(data.text, features="html.parser")  # Format to BeautifulSoup Object
     operator = 'Molimo pokušajte ponovo za 1 minutu...'
@@ -35,41 +38,40 @@ def hakom_provjera(contact):
         operator = soup.findChild('td').text.strip()  # Extract operator info
     except AttributeError:
         pass
-
-    while operator == 'Molimo pokušajte ponovo za 1 minutu...':
-        print(f'Bad IP: {proxy.get_current_ip()}, Getting new IP!')
+    if operator == 'Molimo pokušajte ponovo za 1 minutu...':
+        operator = None
+        print('Getting new IP!')
         proxy.renew_tor_ip()
-        sleep(5)
-        data = session.request("POST", url, headers=headers, data=payload)
-        soup = BeautifulSoup(data.text, features="html.parser")
-        operator = soup.findChild('td').text.strip()
-
-    if operator != 'Molimo pokušajte ponovo za 1 minutu...':
-        # Update Database
+        sleep(2)
         try:
-            record = database.read({'kontakt': contact})
-            operator_history = record['operator_history']
-        except TypeError:
-            database.create({'kontakt': contact, 'operator_history': []})
-            record = database.read({'kontakt': contact})
-            operator_history = record['operator_history']
+            operator = soup.findChild('td').text.strip()  # Extract operator info
+        except AttributeError:
+            pass
+    # Update Database
+    try:
+        record = database.read({'kontakt': contact})
+        operator_history = record['operator_history']
+    except TypeError:
+        database.create({'kontakt': contact, 'operator_history': []})
+        record = database.read({'kontakt': contact})
+        operator_history = record['operator_history']
 
-        timestamp = date.today().strftime("%d-%m-%Y")
+    timestamp = date.today().strftime("%d-%m-%Y")
 
-        # UPDATE OPERATOR HISTORY
-        if len(operator_history) <= 1 or operator != operator_history[-1]['operator']:
+    # UPDATE OPERATOR HISTORY
+    if len(operator_history) <= 1 or operator != operator_history[-1]['operator']:
+        database.update({'kontakt': contact},
+                        {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+        operator_history.append({'operator': operator, 'timestamp': timestamp})
+
+    # if operator is still the same, update timestamp
+    elif len(operator_history) >= 2:
+        if operator == operator_history[-1]['operator'] and operator_history[-1]['operator'] == operator_history[-2]['operator']:
+            database.update({'kontakt': contact}, {'$pop': {'operator_history': -1}})  # remove last item
             database.update({'kontakt': contact},
-                            {'$push': {'operator_history': {'operator': operator, 'timestamp': timestamp}}})
+                            {'$push': {'operator_history': {'operator': operator,
+                                                            'timestamp': timestamp}}})
+            operator_history.pop(-1)
             operator_history.append({'operator': operator, 'timestamp': timestamp})
-
-        # if operator is still the same, update timestamp
-        elif len(operator_history) >= 2:
-            if operator == operator_history[-1]['operator'] and operator_history[-1]['operator'] == operator_history[-2]['operator']:
-                database.update({'kontakt': contact}, {'$pop': {'operator_history': -1}})  # remove last item
-                database.update({'kontakt': contact},
-                                {'$push': {'operator_history': {'operator': operator,
-                                                                'timestamp': timestamp}}})
-                operator_history.pop(-1)
-                operator_history.append({'operator': operator, 'timestamp': timestamp})
-        return {'operator': operator,
-                'operator_history': operator_history}
+    return {'operator': operator,
+            'operator_history': operator_history}
