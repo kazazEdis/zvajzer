@@ -14,7 +14,7 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/<oib_mbs>", methods=["POST", "GET"])
+@app.route("/oib/<oib_mbs>", methods=["POST", "GET"])
 def user(oib_mbs):
     data = json.loads(zvajzer(oib_mbs), encoding="'UTF-8'")
     return make_response(jsonify(data), 200)

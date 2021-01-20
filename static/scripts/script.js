@@ -125,7 +125,7 @@ async function hackom(contact) {
 
 
 async function search() {
-    document.querySelector("title").innerText = 'Žvajzer'
+    document.querySelector("title").innerText = 'Smash'
     document.getElementById("results-box").innerHTML = '';
     document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
     document.getElementById("search-svg").style.display = "none";
@@ -138,7 +138,7 @@ async function search() {
         body: urlencoded,
     };
 
-    let response = await fetch('/' + document.getElementById('oib').value, requestOptions)
+    let response = await fetch('/oib/' + document.getElementById('oib').value, requestOptions)
         .then(response => response.json())
         .catch(error => console.error)
 
@@ -149,7 +149,7 @@ async function search() {
         document.getElementById("search-svg").style.display = "block";
     } else {
         parser('ok', response.skraceno_ime_tvrtke);
-        document.querySelector("title").innerText = "Ž: " + response.skraceno_ime_tvrtke
+        document.querySelector("title").innerText = response.skraceno_ime_tvrtke
 
         //Company Tax number
         parser('ok', 'OIB: ' + response._id)

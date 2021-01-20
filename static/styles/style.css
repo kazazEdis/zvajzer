@@ -1,7 +1,3 @@
-body {
-    background-color: #909090!important;
-}
-
 .main-container {
     padding-top: 5%;
     padding-bottom: 5%;
@@ -10,17 +6,21 @@ body {
 
 }
 
+    
 #particles-js {
-    position : absolute;
-    width:100%;
-    height:100%;
+    position: fixed!important;
+    width: 100%;
+    height: 100%;
+    background-color: #909090;
     z-index:-1;
 }
 
 #main-square {
     height: auto;
     background-color: rgba(0,0,0,0.75);
-  }
+    border-radius: 8px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25), 0 3px 10px 5px rgba(0, 0, 0, 0.3);
+}
   
 
 input[type=number]::-webkit-inner-spin-button,

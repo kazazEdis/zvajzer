@@ -8,7 +8,11 @@ import proxy
 
 
 def hakom_provjera(contact):
-    contact_number = int(contact)
+    try:
+        contact_number = int(contact)
+    except ValueError:
+        print(f"Bad contact number: {contact}")
+        exit()
     # API Call
     colors = ['zelena', 'crna', 'plava']  # Random colors (Captcha)
     color = random.choice(colors)
@@ -25,6 +29,7 @@ def hakom_provjera(contact):
     proxies = {'http': 'socks5h://localhost:9050', 'https': 'socks5h://localhost:9050'}
     data = requests.request("POST", url, headers=headers, data=payload, proxies=proxies)
     soup = BeautifulSoup(data.text, features="html.parser")  # Format to BeautifulSoup Object
+    operator = 'Molimo pokušajte ponovo za 1 minutu...'
     try:
         operator = soup.findChild('td').text.strip()  # Extract operator info
     except AttributeError:
@@ -67,4 +72,3 @@ def hakom_provjera(contact):
                 operator_history.append({'operator': operator, 'timestamp': timestamp})
         return {'operator': operator,
                 'operator_history': operator_history}
-
