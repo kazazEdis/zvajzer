@@ -5,6 +5,10 @@ from flask import Flask, jsonify, render_template, make_response
 import hakom_api
 
 app = Flask(__name__)
+<<<<<<< HEAD
+=======
+sslify = SSLify(app)
+>>>>>>> parent of 9ab25c5... temp SSLify off
 
 
 @app.route("/")
