@@ -93,7 +93,7 @@ async function hackom(contact) {
         parser('red', '0' + String(contact) + ' ' + response.operator, contact);
     }
 
-    if (response['operator_history'].length > 1) {
+    if (response['operator_history'].length > 2) {
         let table = document.createElement("TABLE");
         table.className = "table table-striped table-dark";
         let thead = document.createElement("THEAD");
