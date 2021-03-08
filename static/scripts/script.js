@@ -125,6 +125,8 @@ async function hackom(contact) {
 
 
 async function search() {
+    document.querySelector("#results-box").style.display = 'none'
+    if(document.querySelector("#oib").value.length < 8) return;
     document.querySelector("title").innerText = 'Smash'
     document.getElementById("results-box").innerHTML = '';
     document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
@@ -143,6 +145,7 @@ async function search() {
         .catch(error => console.error)
 
     console.log(response)
+    document.querySelector("#results-box").style.display = 'block'
     if (response._id === null) {
         parser('red', "Subjekt obrisan!");
         document.getElementById("spinner").style.display = "none";
@@ -178,24 +181,22 @@ async function search() {
         }
 
         //Services
-        if (response.nkd != null) { parser('ok', response.nkd); }
+        if (response.nkd != null) parser('ok', response.nkd);
 
 
         //Website
-        if (response.web != null) { hrefParser(response.web); }
+        if (response.web != null) hrefParser(response.web);
 
         //Address    
         parser('ok', String(response.naselje) + ' , ' + String(response.ulica));
 
         //Personality
-        for (let i of response.osobe) {
-            parser('ok', i)
-        }
+        for (let i of response.osobe) parser('ok', i);
+        
 
         //Contacts
-        for (let i of response.kontakti) {
-            contactsParser(i)
-        }
+        if (response.kontakti.length !== 0) parser('ok',`Kontakti: ${response.kontakti}`);
+
 
         document.getElementById("spinner").style.display = "none";
         document.getElementById("search-svg").style.display = "block";

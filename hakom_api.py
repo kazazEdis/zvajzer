@@ -43,7 +43,12 @@ def hakom_provjera(contact):
         soup = BeautifulSoup(data.text, features="html.parser")
         operator = soup.findChild('td').text.strip()
 
-    if operator != 'Molimo pokušajte ponovo za 1 minutu...':
+    if operator == '':
+        record = database.read({'kontakt': contact})
+        operator_history = record['operator_history']
+        return {'operator': 'Operator not found!', 'operator_history': operator_history}
+
+    if operator != 'Molimo pokušajte ponovo za 1 minutu...' and operator != '':
         # Update Database
         try:
             record = database.read({'kontakt': contact})
@@ -63,7 +68,8 @@ def hakom_provjera(contact):
 
         # if operator is still the same, update timestamp
         elif len(operator_history) >= 2:
-            if operator == operator_history[-1]['operator'] and operator_history[-1]['operator'] == operator_history[-2]['operator']:
+            if operator == operator_history[-1]['operator'] and operator_history[-1]['operator'] == \
+                    operator_history[-2]['operator']:
                 database.update({'kontakt': contact}, {'$pop': {'operator_history': -1}})  # remove last item
                 database.update({'kontakt': contact},
                                 {'$push': {'operator_history': {'operator': operator,
