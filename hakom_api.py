@@ -16,7 +16,7 @@ def hakom_provjera(contact):
     # API Call
     colors = ['zelena', 'crna', 'plava']  # Random colors (Captcha)
     color = random.choice(colors)
-    url = "https://www.hakom.hr/default.aspx?id=62"
+    url = "https://wwwtst.hakom.hr/default.aspx?id=62"
 
     payload = '_valid=' + color + '&_validacija=' + color + '&brojTel=385' + str(contact_number) + '&sto=prijenosBroja'
     headers = {
