@@ -195,7 +195,8 @@ async function search() {
         
 
         //Contacts
-        if (response.kontakti.length !== 0) parser('ok',`Kontakti: ${response.kontakti}`);
+        if (response.kontakti.length !== 0)
+        for (i in response.kontakti) contactsParser(i);
 
 
         document.getElementById("spinner").style.display = "none";
