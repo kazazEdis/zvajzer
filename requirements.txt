@@ -1,4 +1,4 @@
-absl-py==1.0.0
+absl-py
 astroid==2.4.2
 astunparse==1.6.3
 beautifulsoup4==4.9.3
