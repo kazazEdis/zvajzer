@@ -4,6 +4,3 @@ python3-h5py
 python3-kiwisolver
 python3-matplotlib
 python3-numpy
-python3-tensorflow-cpu
-python3-tensorflow-estimator
-python3-tensorflow-io-gcs-filesystem
