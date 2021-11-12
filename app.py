@@ -4,6 +4,7 @@ import simplejson as json
 from flask import Flask, jsonify, render_template, make_response
 import hakom_api
 from flask_sslify import SSLify
+import hakom
 
 app = Flask(__name__)
 sslify = SSLify(app)
@@ -20,14 +21,14 @@ def user(oib_mbs):
     return make_response(jsonify(data), 200)
 
 
-@app.route("/operator/<contact_number>", methods=["POST", "GET"])
+@app.route("/operator/<contact_number>", methods=["GET"])
 def hackom(contact_number):
-    if len(contact_number) <= 10:
-        operator = hakom_api.hakom_provjera(contact_number)
-        return make_response(jsonify(operator), 200)
-    else:
-        return make_response(jsonify(contact_number), 200)
-
+    if contact_number[0:3] != "385":
+        contact_number = "385" + contact_number
+    print(contact_number)
+    operator = hakom.operator(contact_number)
+    return make_response(jsonify(operator), 200)
+    
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

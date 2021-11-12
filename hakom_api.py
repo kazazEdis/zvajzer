@@ -1,3 +1,4 @@
+## THIS FILE IS DEPRECATED
 import requests
 import random
 from time import sleep
@@ -5,7 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import date
 import database
 import proxy
-
+import hakom
 
 def hakom_provjera(contact):
     try:

@@ -86,40 +86,12 @@ async function hackom(contact) {
         .then(response => response.json())
         .catch(error => console.error)
 
+        response = response[0]
 
-    if (response.operator !== "ISKON") {
-        parser('green', '0' + String(contact) + ' ' + response.operator, contact);
+    if (response.Operator !== "ISKON") {
+        parser('green', '0' + String(contact) + ' ' + response.Operator, contact);
     } else {
-        parser('red', '0' + String(contact) + ' ' + response.operator, contact);
-    }
-
-    if (response['operator_history'].length > 2) {
-        let table = document.createElement("TABLE");
-        table.className = "table table-striped table-dark";
-        let thead = document.createElement("THEAD");
-        thead.innerHTML = '<tr><th scope="col">Operator</th><th scope="col">Datum provjere</th></tr>'
-        let tbody = document.createElement("TBODY");
-
-
-        for (let item of response['operator_history']) {
-            operator = item.operator
-            timestamp = item.timestamp
-
-            let tr = document.createElement("TR");
-            tr.className = "table-striped";
-            let a = document.createElement("TD");
-            a.innerText = operator
-            let b = document.createElement("TD");
-            b.innerText = timestamp
-
-            tr.appendChild(a);
-            tr.appendChild(b);
-            tbody.appendChild(tr);
-        }
-
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        document.getElementById(String(contact)).appendChild(table);
+        parser('red', '0' + String(contact) + ' ' + response.Operator, contact);
     }
 }
 
@@ -195,8 +167,9 @@ async function search() {
         
 
         //Contacts
-        if (response.kontakti.length !== 0)
-        for (i in response.kontakti) contactsParser(i);
+        if (response.kontakti.length !== 0){
+            for (i in response.kontakti) contactsParser(response.kontakti[i]);
+        }
 
 
         document.getElementById("spinner").style.display = "none";

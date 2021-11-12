@@ -16,7 +16,7 @@ def get_current_ip():
     session.proxies['https']='socks5h://localhost:9051'
 
     try:
-        r = session.get('http://ifconfig.me')
+        r = session.get('https://ifconfig.me')
     except Exception as e:
         print(str(e))
     else:
@@ -28,3 +28,5 @@ def renew_tor_ip():
         controller.authenticate(password=TOR_PASS)
         controller.signal(Signal.NEWNYM)
 
+if __name__ == '__main__':
+    print(get_current_ip())
