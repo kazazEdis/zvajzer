@@ -62,7 +62,7 @@ tensorboard-plugin-wit==1.8.0
 tensorflow
 tensorflow-cpu
 tensorflow-estimator==2.7.0
-tensorflow-io-gcs-filesystem==0.22.0
+tensorflow-io-gcs-filesystem
 termcolor==1.1.0
 toml==0.10.2
 typing-extensions==3.10.0.2
