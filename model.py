@@ -50,9 +50,10 @@ starting_filters = 32
 data_dir = Path("./temp_dataset/")
 
 # Get list of all the images
-images = sorted(list(map(str, list(data_dir.glob("*.jpeg")))))
-labels = [img.split(os.path.sep)[-1].split(".jpeg")[0] for img in images]
-characters = sorted(list(set(char for label in labels for char in label)))
+# images = sorted(list(map(str, list(data_dir.glob("*.jpeg")))))
+# labels = [img.split(os.path.sep)[-1].split(".jpeg")[0] for img in images]
+# characters = sorted(list(set(char for label in labels for char in label)))
+characters=['2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 """
 ## Preprocessing

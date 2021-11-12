@@ -11,9 +11,8 @@ import model as m
 model, prediction_model = m.build_model()
 model.load_weights('my_model.hdf5')
 
-known_captchas = deduplicate.known_captchas()
-unknown_captchas = deduplicate.unknown_captchas()
-print(len(known_captchas))
+known_captchas 
+
 
 
 def ocr():
@@ -45,14 +44,7 @@ def operator(phone_number: str):
         shash = deduplicate.hash_binary(response.content)
 
         url = "https://app.hakom.hr/default.aspx?id=62&iframe=yes"
-        captcha = known_captchas.get(shash)
-
-        if captcha == None:
-            # print("Using OCR!")
-            captcha = ocr()
-        else:
-            print("Using known Captcha!")
-
+        captcha = ocr()
         payload = f'brojTel={phone_number}&cp={captcha}&iframe=yes&sto=prijenosBroja'
         headers = {
             'sec-ch-ua': '"Google Chrome";v="95", "Chromium";v="95", ";Not A Brand";v="99"',
@@ -73,11 +65,6 @@ def operator(phone_number: str):
             results = soup.find_all("td")
             results = [{"Success": True, "Operator": results[0].text,
                         "Broj": results[1].text, "Status": results[2].text}]
-            # print("Success!")
-            if known_captchas.get(shash) == None:
-                shutil.copyfile('test.jpeg', f'temp_dataset/{captcha}.jpeg')
-                known_captchas[shash] = captcha
-
             return results
 
         except Exception:
@@ -85,9 +72,6 @@ def operator(phone_number: str):
             timeout = "Molimo pokušajte ponovo za 1 minutu..."
             bad_captcha = "Greška, provjerite unos kontrolne vrijednosti"
             if status == bad_captcha:
-                if unknown_captchas.get(shash) == None:
-                    shutil.copyfile('test.jpeg', f'dataset/{captcha}.jpeg')
-                    unknown_captchas[shash] = captcha
                     return operator(phone_number)
 
             elif status == timeout:
