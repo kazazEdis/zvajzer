@@ -56,7 +56,7 @@ simplejson==3.17.2
 six==1.15.0
 soupsieve==2.0.1
 stem==1.8.0
-tensorboard==2.7.0
+tensorboard
 tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.0
 tensorflow==2.6.2
