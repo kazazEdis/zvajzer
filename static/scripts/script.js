@@ -9,34 +9,24 @@ document.querySelector("#zvajz-button").addEventListener("click", () => {
     search();
 });
 
-document.querySelector("#operator").addEventListener("click", () => {
-    let inp = document.getElementById('operator-box').value
-    while (inp.charAt(0) === '0') { inp = inp.substring(1); }
-    hackom(inp)
-    document.getElementById('operator-box').value = ''
-});
-
-document.querySelector("#operator-box").addEventListener("keydown", function (event) {
-    if (event.keyCode == 13) {
-        let inp = document.getElementById('operator-box').value
-        while (inp.charAt(0) === '0') { inp = inp.substring(1); }
-        hackom(inp)
-        document.getElementById('operator-box').value = ''
-    }
-});
-
 
 function parser(status, output, id) { //Status can be ok, red, green
     let node = document.createElement("LI");
     if (status === 'ok') {
         node.className = "list-group-item list-group-item-secondary mx-3";
-        if (id != null) { node.id = String(id); }
+        if (id != null) {
+            node.id = String(id);
+        }
     } else if (status === 'red') {
         node.className = "list-group-item list-group-item-danger mx-3";
-        if (id != null) { node.id = String(id); }
+        if (id != null) {
+            node.id = String(id);
+        }
     } else if (status === 'green') {
         node.className = "list-group-item list-group-item-success mx-3";
-        if (id != null) { node.id = String(id); }
+        if (id != null) {
+            node.id = String(id);
+        }
     }
 
     let textnode = document.createTextNode(output);
@@ -56,27 +46,13 @@ function hrefParser(output) {
     document.getElementById("results").appendChild(node);
 }
 
-function contactsParser(contact) {
-    let box = document.createElement("DIV")
-    box.id = '0' + String(contact);
-    box.className = "col mt-1";
-    let button = document.createElement("BUTTON");
-    button.innerHTML = '0' + String(contact);
-    button.type = "button";
-    button.id = "hackom-button";
-    button.className = "col btn btn-danger";
-    button.setAttribute('onclick', 'hackom(' + String(contact) + ')');
-    box.appendChild(button);
-    document.getElementById("contacts").appendChild(box);
-}
 
 
 
 async function hackom(contact) {
     try {
         document.getElementById('0' + String(contact)).remove()
-    }
-    catch (err) { }
+    } catch (err) {}
 
     let requestOptions = {
         method: 'GET',
@@ -86,7 +62,7 @@ async function hackom(contact) {
         .then(response => response.json())
         .catch(error => console.error)
 
-        response = response[0]
+    response = response[0]
 
     if (response.Operator !== "ISKON") {
         parser('green', '0' + String(contact) + ' ' + response.Operator, contact);
@@ -98,7 +74,7 @@ async function hackom(contact) {
 
 async function search() {
     document.querySelector("#results-box").style.display = 'none'
-    if(document.querySelector("#oib").value.length < 8) return;
+    if (document.querySelector("#oib").value.length < 8) return;
     document.querySelector("title").innerText = 'Smash'
     document.getElementById("results-box").innerHTML = '';
     document.getElementById("results-box").innerHTML = '<ul id="results" class="list-group"></ul><div id="contacts" class="row d-flex align-items-start m-2"></div>';
@@ -145,13 +121,6 @@ async function search() {
             parser('green', 'Kapital: ' + response.temeljni_kapital_tvrtke.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KN')
         }
 
-        //Company size
-        if (response.velicina != "Veliki") {
-            parser('ok', 'Veličina: ' + response.velicina);
-        } else {
-            parser('red', 'Veličina: ' + response.velicina);
-        }
-
         //Services
         if (response.nkd != null) parser('ok', response.nkd);
 
@@ -162,13 +131,15 @@ async function search() {
         //Address    
         parser('ok', String(response.naselje) + ' , ' + String(response.ulica));
 
-        //Personality
-        for (let i of response.osobe) parser('ok', i);
-        
-
         //Contacts
-        if (response.kontakti.length !== 0){
-            for (i in response.kontakti) contactsParser(response.kontakti[i]);
+        if (response.kontakti.length !== 0) {
+            var kontakti = ""
+            response.kontakti.forEach(
+                (kontakt) => {
+                    kontakti = kontakti + `${0 + kontakt} `
+                }
+            )
+            parser('ok', `Kontakti: ${kontakti}`);
         }
 
 

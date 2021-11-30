@@ -19,12 +19,8 @@ def zvajzer(oib_ili_mbs):
             "skraceno_ime_tvrtke": sudski["skraceno_ime_tvrtke"],
             "pravni_postupak": sudski["pravni_postupak"],
             "temeljni_kapital_tvrtke": sudski["temeljni_kapital_tvrtke"],
-            "velicina": velicina,
-            "nkd": nkd,
             "naselje": sudski["naselje"],
             "ulica": sudski["ulica"],
-            "web": web,
-            "osobe": osobe,
             "kontakti": brojevi
         }
 

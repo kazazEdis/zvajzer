@@ -3,10 +3,9 @@ from main import zvajzer
 import simplejson as json
 from flask import Flask, jsonify, render_template, make_response
 from flask_sslify import SSLify
-import hakom
 
 app = Flask(__name__)
-sslify = SSLify(app)
+# sslify = SSLify(app)
 
 
 @app.route("/")
