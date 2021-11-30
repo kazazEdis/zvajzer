@@ -5,4 +5,3 @@ python-dotenv==0.19.2
 requests==2.26.0
 simplejson==3.17.6
 stem==1.8.0
-tensorflow==2.7.0
