@@ -14,7 +14,6 @@ pymongo==4.0
 python-dotenv==0.19.2
 requests==2.26.0
 simplejson==3.17.6
-stem==1.8.0
 urllib3==1.26.7
 Werkzeug==2.0.2
 yarg==0.1.9
